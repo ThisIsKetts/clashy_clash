@@ -15,6 +15,13 @@ int main()
     Texture2D worldMap = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
     Vector2 wmPos{0.0, 0.0};
     float speed{4.0};
+
+    Texture2D knight = LoadTexture("characters/knight_idle_spritesheet.png");
+    Vector2 knightPos
+    {
+        (float)windowWidth/2.0f - 4.0f * (0.5f * (float)knight.width/6.0f),
+        (float)windowHeight/2.0f - 4.0f * (0.5f * (float)knight.height)
+    };
     
 
     SetTargetFPS(60);
@@ -40,11 +47,13 @@ int main()
             wmPos = Vector2Subtract(wmPos, Vector2Scale(Vector2Normalize(direction), speed));
         }
 
-        
-
-
         // draw the world map
         DrawTextureEx(worldMap, wmPos, 0.0, 4.0, WHITE);
+
+        // draw the character
+        Rectangle source{0.f, 0.f, (float)knight.width/6.0f, (float)knight.height};
+        Rectangle dest{knightPos.x, knightPos.y, 4.0f * (float)knight.width/6.0f, 4.0f * (float)knight.height};
+        DrawTexturePro(knight, source, dest, Vector2{}, 0.f, WHITE);
 
         // stop drawing
         EndDrawing();
