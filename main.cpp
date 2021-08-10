@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "Character.h"
+#include "Prop.h"
 
 int main()
 {
@@ -18,6 +19,8 @@ int main()
    
     Character knight{windowWidth, windowHeight};
 
+    Prop rock{Vector2{0.f, 0.f}, LoadTexture("nature_tileset/Rock.png")};
+
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
@@ -30,6 +33,9 @@ int main()
 
         // draw the world map
         DrawTextureEx(worldMap, wmPos, 0.0, worldMapScale, WHITE);
+
+        rock.Render(knight.getWorldPos());
+
         knight.tick(GetFrameTime());
         // check map bounds
         if (knight.getWorldPos().x < 0.f ||
