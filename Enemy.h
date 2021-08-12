@@ -9,6 +9,7 @@ public:
     Enemy(Vector2 pos, Texture2D idle_texture, Texture run_texture);
     virtual void tick(float deltaTime) override;
     void setTarget(Character* player){ target = player; }
+    virtual Vector2 getScreenPos() override;
 private:
     Character* target;
 };
