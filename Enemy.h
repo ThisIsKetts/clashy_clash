@@ -5,7 +5,7 @@ class Enemy : public BaseCharacter
 {
 public:
     Enemy(Vector2 pos, Texture2D idle_texture, Texture run_texture);
-    void tick(float deltaTime);
+    virtual void tick(float deltaTime) override;
 private:
 
 };
