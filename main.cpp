@@ -71,6 +71,7 @@ int main()
 
         goblin.tick(GetFrameTime());
 
+        // check colision with sword, if true, goblin enemy set alive = false and goblin gets removed.
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
             if (CheckCollisionRecs(goblin.getCollisionRec(), knight.getCollisionRec()))

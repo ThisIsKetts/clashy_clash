@@ -17,8 +17,10 @@ Vector2 Character::getScreenPos()
 
 void Character::tick(float deltaTime)
 {   
+    // alive check
     if (!getAlive()) return;
 
+    // is key pressed check to move character
     if (IsKeyDown(KEY_A))
         velocity.x -= 1.0;
     if (IsKeyDown(KEY_D))
@@ -29,7 +31,8 @@ void Character::tick(float deltaTime)
         velocity.y += 1.0;
 
     BaseCharacter::tick(deltaTime);
-
+    
+    // sword postion and rotation
     Vector2 origin{};
     Vector2 offSet{};
     float rotation{};
@@ -61,10 +64,20 @@ void Character::tick(float deltaTime)
     Rectangle dest{getScreenPos().x + offSet.x, getScreenPos().y + offSet.y, weapon.width * scale, weapon.height * scale};
     DrawTexturePro(weapon, source, dest, origin, rotation, WHITE);
 
+    // sword colision visualiszation 
     DrawRectangleLines(
         weaponCollisionRec.x,
         weaponCollisionRec.y,
         weaponCollisionRec.width,
         weaponCollisionRec.height,
         RED);
+}
+
+void Character::takeDamage(float damage)
+{
+    health -= damage;
+    if(health <= 0.f)
+    {
+        setAlive(false);
+    }
 }
