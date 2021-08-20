@@ -18,20 +18,31 @@ int main()
     Texture2D worldMap = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
     Vector2 wmPos{0.0, 0.0};
     const float worldMapScale{4.0f};
-   
+
     Character knight{windowWidth, windowHeight};
 
     Prop props[2]{
         Prop{Vector2{600.f, 300.f}, LoadTexture("nature_tileset/Rock.png")},
-        Prop{Vector2{400.f, 500.f}, LoadTexture("nature_tileset/Log.png")}
-    };
+        Prop{Vector2{400.f, 500.f}, LoadTexture("nature_tileset/Log.png")}};
 
     Enemy goblin{
-        Vector2{},
+        Vector2{800.f, 300.f},
         LoadTexture("characters/goblin_idle_spritesheet.png"),
-        LoadTexture("characters/goblin_run_spritesheet.png")
-    };
-    goblin.setTarget(&knight);
+        LoadTexture("characters/goblin_run_spritesheet.png")};
+
+    Enemy slime{
+        Vector2{500.f, 700.f},
+        LoadTexture("characters/slime_idle_spritesheet.png"),
+        LoadTexture("characters/slime_run_spritesheet.png")};
+
+    Enemy *enemies[]{
+        &goblin,
+        &slime};
+
+    for (auto enemy : enemies)
+    {
+        enemy->setTarget(&knight);
+    }
 
     SetTargetFPS(60);
     while (!WindowShouldClose())
@@ -63,8 +74,6 @@ int main()
             std::string knightsHealth = "Health: ";
             knightsHealth.append(std::to_string(knight.getHealth()), 0, 5);
             DrawText(knightsHealth.c_str(), 55.f, 45.f, 40, RED);
-
-
         }
 
         knight.tick(GetFrameTime());
@@ -79,21 +88,26 @@ int main()
         // check prop collisions
         for (auto prop : props)
         {
-           if  (CheckCollisionRecs(prop.getCollisionRec(knight.getWorldPos()), knight.getCollisionRec()))
-           {
-               knight.undoMovement();
-           }
+            if (CheckCollisionRecs(prop.getCollisionRec(knight.getWorldPos()), knight.getCollisionRec()))
+            {
+                knight.undoMovement();
+            }
         }
 
-        goblin.tick(GetFrameTime());
+        for (auto enemy : enemies)
+        {
+            enemy->tick(GetFrameTime());
+        }
 
         // check colision with sword, if true, goblin enemy set alive = false and goblin gets removed.
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            if (CheckCollisionRecs(goblin.getCollisionRec(), knight.getCollisionRec()))
+            for (auto enemy : enemies)
             {
-                goblin.setAlive(false);
-
+                if (CheckCollisionRecs(enemy->getCollisionRec(), knight.getCollisionRec()))
+                {
+                    enemy->setAlive(false);
+                }
             }
         }
 
